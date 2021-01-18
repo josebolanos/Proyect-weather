@@ -22,11 +22,8 @@ function buscarClima(e) {
         mostrarError('Ambos campos son obligatorios');
         return;
     }
-
-
-
-
     // Consultariamos la API
+    consultarAPI(ciudad, pais);
 }
 
 // Funcion de error
@@ -53,4 +50,24 @@ function mostrarError(mensaje) {
 
         }
   
+}
+// Funcion para acceder a la API del tiempo
+function consultarAPI(ciudad, pais) {
+    // Aqui colocamos id que nos da la web dela API
+    const appID = '0f79eb01f89877b6be1f6d3a8133183d'
+    // Aqui ponemos el url que nos da la web de la API y le añadimos http para que detecte que proviene de una web y no un archivo interno
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appID}`;
+    // Accedemos al archivo json para visualizarlo
+    fetch(url)
+        .then( respuesta => respuesta.json() )
+        //Añadimos un if para que en casa que no encuentre la ciudad nos de una mensaje de aviso datos.cod 404 es el codigo de error interno
+        .then( datos => {
+            // Tener en cuenta se pone "404" asi por que es String
+            if(datos.cod === "404") {
+                mostrarError('Ciudad no encontrada')
+            }
+        })
+
+    console.log(url);
+
 }
