@@ -62,12 +62,66 @@ function consultarAPI(ciudad, pais) {
         .then( respuesta => respuesta.json() )
         //Añadimos un if para que en casa que no encuentre la ciudad nos de una mensaje de aviso datos.cod 404 es el codigo de error interno
         .then( datos => {
+            // Esta funcion es para limpiar la informacion anterior
+            limpiarHTML();
             // Tener en cuenta se pone "404" asi por que es String
             if(datos.cod === "404") {
                 mostrarError('Ciudad no encontrada')
+                return;
             }
+
+            // Visualizar la respuesta en el HTML
+            mostrarClima(datos);
         })
-
-    console.log(url);
-
 }
+
+
+function mostrarClima(datos) {
+    // Hemos accedido a la informacion que nos interesa dentro de API
+    console.log(datos);
+    const { name, main: {temp, temp_max, temp_min } } = datos;
+    // Con esto hemos pasar grados kelvin a centigrados
+    const temperatura = kelvinACentigrados(temp);
+    const max = kelvinACentigrados(temp_max);
+    const min = kelvinACentigrados(temp_min);
+    // He creado un DIV Y UN P  e introducido los datos en el HTML
+
+    const nombreCiudad = document.createElement('p');
+    nombreCiudad.textContent = `${name}`;
+    nombreCiudad.classList.add('font-bold', 'text-6xl', 'text-white', 'text-center');
+
+    const actual = document.createElement('p');
+    actual.innerHTML = `${temperatura} &#8451;`;
+    actual.classList.add('font-bold', 'text-5xl');
+
+    const tempMaxima = document.createElement('p');
+    tempMaxima.innerHTML = `Max: ${max} &#8451;`;
+    tempMaxima.classList.add('text-xl', 'text-center', 'text-white');
+
+    const tempMinima = document.createElement('p');
+    tempMinima.innerHTML = `Min: ${min} &#8451;`;
+    tempMinima.classList.add('text-l', 'text-center','text-white');
+   
+    const resultadoDiv = document.createElement('div');
+    resultadoDiv.classList.add('text-center', 'text-white');
+    // Introducimos los resultados en el HTML
+    resultado.appendChild(nombreCiudad);
+    resultadoDiv.appendChild(actual);
+    resultado.appendChild(resultadoDiv);
+    resultado.appendChild(tempMaxima);
+    resultado.appendChild(tempMinima);
+    
+}
+
+// Crearcion de nueva funcion para pasar Kelvin a Centigrados y redondear con parseInt
+const kelvinACentigrados = grados => parseInt(grados - 273.15);
+
+
+// He creado una funcion para limpiar siempre el resultado anterior del HTML
+function limpiarHTML() {
+    while(resultado.firstChild) {
+        resultado.removeChild(resultado.firstChild);
+    }
+}
+
+
