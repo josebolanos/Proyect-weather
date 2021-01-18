@@ -6,6 +6,7 @@ html {
 }
 
 
+
 .sk-fading-circle {
     margin: 100px auto;
     width: 40px;
@@ -131,6 +132,8 @@ html {
     -webkit-animation-delay: -0.1s;
             animation-delay: -0.1s;
   }
+
+
   
   @-webkit-keyframes sk-circleFadeDelay {
     0%, 39%, 100% { opacity: 0; }
