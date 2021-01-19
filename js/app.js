@@ -3,6 +3,8 @@ const resultado = document.querySelector('#resultado');
 const formulario = document.querySelector('#formulario');
 
 
+
+
 window.addEventListener('load', () => {
     formulario.addEventListener('submit', buscarClima);
 });
@@ -57,6 +59,9 @@ function consultarAPI(ciudad, pais) {
     const appID = '0f79eb01f89877b6be1f6d3a8133183d'
     // Aqui ponemos el url que nos da la web de la API y le añadimos http para que detecte que proviene de una web y no un archivo interno
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appID}`;
+
+    // Muestra un spinner de carga
+    Spinner();
     // Accedemos al archivo json para visualizarlo
     fetch(url)
         .then( respuesta => respuesta.json() )
@@ -73,18 +78,33 @@ function consultarAPI(ciudad, pais) {
             // Visualizar la respuesta en el HTML
             mostrarClima(datos);
         })
+        
 }
 
 
 function mostrarClima(datos) {
     // Hemos accedido a la informacion que nos interesa dentro de API
     console.log(datos);
-    const { name, main: {temp, temp_max, temp_min } } = datos;
+    const { name, weather:[{description}],main: {temp, temp_max, temp_min } } = datos;
+  
+
+    
+
+   
+
     // Con esto hemos pasar grados kelvin a centigrados
     const temperatura = kelvinACentigrados(temp);
     const max = kelvinACentigrados(temp_max);
     const min = kelvinACentigrados(temp_min);
     // He creado un DIV Y UN P  e introducido los datos en el HTML
+
+    
+
+
+    const climaCiudad = document.createElement('p');
+    climaCiudad.textContent = `${description}`;
+    climaCiudad.classList.add('font-bold', 'text-6xl', 'text-white', 'text-center');
+
 
     const nombreCiudad = document.createElement('p');
     nombreCiudad.textContent = `${name}`;
@@ -110,6 +130,11 @@ function mostrarClima(datos) {
     resultado.appendChild(resultadoDiv);
     resultado.appendChild(tempMaxima);
     resultado.appendChild(tempMinima);
+    resultado.appendChild(climaCiudad);
+   
+
+
+
     
 }
 
@@ -122,6 +147,33 @@ function limpiarHTML() {
     while(resultado.firstChild) {
         resultado.removeChild(resultado.firstChild);
     }
+}
+// Crarmos una funcion para el Spinner de carga
+function Spinner() {
+    // Limpiar el html
+    limpiarHTML();
+    // Creamos un div donde contendra el spinner 
+    const divSpinner = document.createElement('div');
+    // Clase del spinner en css
+    divSpinner.classList.add('sk-fading-circle');
+    // Informacion del spinner sacada de SpinKit
+    divSpinner.innerHTML = `
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    `;
+
+    // Lo añadimos al HTML
+    resultado.appendChild(divSpinner);
 }
 
 
