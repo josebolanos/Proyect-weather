@@ -5,6 +5,7 @@ const formulario = document.querySelector('#formulario');
 
 
 
+
 window.addEventListener('load', () => {
     formulario.addEventListener('submit', buscarClima);
 });
@@ -83,27 +84,27 @@ function consultarAPI(ciudad, pais) {
 
 
 function mostrarClima(datos) {
-    // Hemos accedido a la informacion que nos interesa dentro de API
+    // He accedido a la informacion que nos interesa dentro de API
     console.log(datos);
-    const { name, weather:[{description}],main: {temp, temp_max, temp_min } } = datos;
-  
-
+    const { name, weather:[{description, icon}],main: {temp, temp_max, temp_min } } = datos;
+    console.log(icon);
+    
     
 
-   
 
     // Con esto hemos pasar grados kelvin a centigrados
     const temperatura = kelvinACentigrados(temp);
     const max = kelvinACentigrados(temp_max);
     const min = kelvinACentigrados(temp_min);
     // He creado un DIV Y UN P  e introducido los datos en el HTML
+    
 
     
 
 
     const climaCiudad = document.createElement('p');
     climaCiudad.textContent = `${description}`;
-    climaCiudad.classList.add('font-bold', 'text-6xl', 'text-white', 'text-center');
+    climaCiudad.classList.add('font-bold', 'text-4xl', 'text-white', 'text-center');
 
 
     const nombreCiudad = document.createElement('p');
